@@ -141,7 +141,9 @@ services:
         restart: true
     command: ["./scripts/start.api.sh"]
     healthcheck:
-      test: curl -f http://localhost:3000/health || exit 1
+      test: |
+        URL=$$(echo "$${LAGO_API_URL}/health" | sed 's|http://[^:/]*|http://localhost|')
+        curl -f $$URL || exit 1
       interval: 10s
       start_period: 30s
       timeout: 60s
